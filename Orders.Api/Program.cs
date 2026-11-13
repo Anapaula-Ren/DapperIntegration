@@ -3,6 +3,8 @@ using Orders.Api.dtos;
 using Orders.Api.helpers;
 using Orders.Api.models;
 using Orders.Api.services;
+using Orders.Api.Services.Dapper;
+using Orders.Api.repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,9 @@ builder.Services.AddOptions<StudentInfo>()
 
 builder.Services.AddScoped<IOrderService,OrderService>();
 builder.Services.AddScoped<IStudentService,StudentService>();
+builder.Services.AddSingleton<DapperContext>();
+builder.Services.AddScoped<IDapperService, DapperService>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddControllers()
     .ConfigureApiBehaviorOptions(options =>
     {

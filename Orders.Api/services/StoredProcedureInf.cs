@@ -1,0 +1,8 @@
+namespace Orders.Api.Services.Dapper;
+
+public class StoredProcedureInf
+{
+    public string IdConnectionString { get; set; } = string.Empty;
+    public string SchemaName { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
+}
