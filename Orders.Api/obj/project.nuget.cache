@@ -1,22 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "E77F86FgXt8=",
+  "dgSpecHash": "+piVYsRmYn4=",
   "success": true,
-  "projectFilePath": "c:\\Users\\doril\\Documents\\7mo Semestre\\Topicos de programacion\\Unidad 3 y 4\\Orders.Api\\Orders.Api.csproj",
+  "projectFilePath": "C:\\Users\\anapa\\Downloads\\Orders.Api (1)\\Orders.Api\\Orders.Api.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\doril\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.13\\microsoft.aspnetcore.openapi.10.0.13.nupkg.sha512",
-    "C:\\Users\\doril\\.nuget\\packages\\microsoft.openapi\\2.12.2\\microsoft.openapi.2.12.2.nupkg.sha512",
-    "C:\\Users\\doril\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\10.3.1\\swashbuckle.aspnetcore.swaggerui.10.3.1.nupkg.sha512"
+    "C:\\Users\\anapa\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.13\\microsoft.aspnetcore.openapi.10.0.13.nupkg.sha512",
+    "C:\\Users\\anapa\\.nuget\\packages\\microsoft.openapi\\2.12.2\\microsoft.openapi.2.12.2.nupkg.sha512",
+    "C:\\Users\\anapa\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\10.3.1\\swashbuckle.aspnetcore.swaggerui.10.3.1.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1900",
-      "level": "Warning",
-      "message": "Error occurred while getting package vulnerability data: Unable to load the service index for source https://api.nuget.org/v3/index.json.",
-      "projectPath": "c:\\Users\\doril\\Documents\\7mo Semestre\\Topicos de programacion\\Unidad 3 y 4\\Orders.Api\\Orders.Api.csproj",
-      "warningLevel": 1,
-      "filePath": "c:\\Users\\doril\\Documents\\7mo Semestre\\Topicos de programacion\\Unidad 3 y 4\\Orders.Api\\Orders.Api.csproj",
-      "targetGraphs": []
-    }
-  ]
+  "logs": []
 }

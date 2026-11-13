@@ -6,8 +6,8 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build Orders.Api",
-      "program": "${workspaceFolder}/Orders.Api/bin/Debug/net10.0/Orders.Api.dll",
-      "cwd": "${workspaceFolder}/Orders.Api",
+      "program": "${workspaceFolder}/bin/Debug/net10.0/Orders.Api.dll",
+      "cwd": "${workspaceFolder}",
       "stopAtEntry": false,
       "env": {
         "ASPNETCORE_ENVIRONMENT": "Development",
