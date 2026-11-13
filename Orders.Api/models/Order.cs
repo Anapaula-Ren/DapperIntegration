@@ -17,12 +17,5 @@ public class Order
     public DateTime? DeliveryDate { get; set; }
     public string? Notes { get; set; }
     
-    // Propiedad calculada
     public bool HasFinished => Status is "Delivered" or "Cancelled";
-    
-    // Para que el controlador actual siga funcionando, mapeamos Id a OrderId
-    public string Id { 
-        get => OrderNumber; 
-        set => OrderNumber = value; 
-    }
 }

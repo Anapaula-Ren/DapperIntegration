@@ -25,15 +25,19 @@ public class OrderRepository : IOrderRepository
     public async Task<(bool Success, int? OrderId, string? Error)> CreateAsync(Order order)
     {
         var p = new DynamicParameters();
-        p.Add("@OrderNumber", order.Id);
-        p.Add("@CustomerId", 1); // Temporal hasta que adaptemos el modelo
-        p.Add("@OriginCity", "Monterrey");
-        p.Add("@DestinationCity", "CDMX");
-        p.Add("@CargoDescription", "Carga General");
-        p.Add("@WeightKg", 1000);
-        p.Add("@FreightAmount", 5000);
+        p.Add("@OrderNumber", order.OrderNumber);
+        p.Add("@CustomerId", order.CustomerId);
+        p.Add("@VehicleId", order.VehicleId);
+        p.Add("@OriginCity", order.OriginCity);
+        p.Add("@DestinationCity", order.DestinationCity);
+        p.Add("@CargoDescription", order.CargoDescription);
+        p.Add("@WeightKg", order.WeightKg);
+        p.Add("@FreightAmount", order.FreightAmount);
+        p.Add("@CurrencyCode", order.CurrencyCode);
         p.Add("@Status", order.Status);
-        p.Add("@PickupDate", DateTime.Today);
+        p.Add("@PickupDate", order.PickupDate);
+        p.Add("@DeliveryDate", order.DeliveryDate);
+        p.Add("@Notes", order.Notes);
         p.Add("@OrderId", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
         var response = await _dapper.ExecuteStoredProcedureNonQueryAsync(Sp("usp_TransportOrders_Create"), p);
@@ -54,6 +58,8 @@ public class OrderRepository : IOrderRepository
     {
         var p = new DynamicParameters();
         p.Add("@Status", status);
+        p.Add("@CustomerId", null);
+        p.Add("@OrderNumber", null);
         
         var response = await _dapper.ExecuteStoredProcedureAsync<Order>(Sp("usp_TransportOrders_GetAll"), p, hasArray: true);
         return response.Success && response.Result is IEnumerable<Order> list ? list.ToList() : Array.Empty<Order>();
@@ -62,17 +68,20 @@ public class OrderRepository : IOrderRepository
     public async Task<(bool Success, string? Error)> UpdateAsync(Order order)
     {
         var p = new DynamicParameters();
-        p.Add("@OrderId", order.Id);
-        p.Add("@OrderNumber", order.Id);
-        p.Add("@CustomerId", 1);
-        p.Add("@OriginCity", "Monterrey");
-        p.Add("@DestinationCity", "CDMX");
-        p.Add("@CargoDescription", "Carga General");
-        p.Add("@WeightKg", 1000);
-        p.Add("@FreightAmount", 5000);
-        p.Add("@CurrencyCode", "MXN");
+        p.Add("@OrderId", order.OrderId);
+        p.Add("@OrderNumber", order.OrderNumber);
+        p.Add("@CustomerId", order.CustomerId);
+        p.Add("@VehicleId", order.VehicleId);
+        p.Add("@OriginCity", order.OriginCity);
+        p.Add("@DestinationCity", order.DestinationCity);
+        p.Add("@CargoDescription", order.CargoDescription);
+        p.Add("@WeightKg", order.WeightKg);
+        p.Add("@FreightAmount", order.FreightAmount);
+        p.Add("@CurrencyCode", order.CurrencyCode);
         p.Add("@Status", order.Status);
-        p.Add("@PickupDate", DateTime.Today);
+        p.Add("@PickupDate", order.PickupDate);
+        p.Add("@DeliveryDate", order.DeliveryDate);
+        p.Add("@Notes", order.Notes);
 
         var response = await _dapper.ExecuteStoredProcedureNonQueryAsync(Sp("usp_TransportOrders_Update"), p);
         return (response.Success, response.InnerException);
