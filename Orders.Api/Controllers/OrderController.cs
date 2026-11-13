@@ -1,45 +1,62 @@
 using Microsoft.AspNetCore.Mvc;
-using Orders.Api.models.dtos;
+using Orders.Api.models;
 using Orders.Api.services;
+
+namespace Orders.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-
 public class OrderController : ControllerBase
 {
-    private readonly IOrderService _orderService;
+    private readonly IOrderService _service;
 
-    public OrderController(IOrderService orderService)
+    public OrderController(IOrderService service)
     {
-        _orderService = orderService;
+        _service = service;
     }
 
     [HttpPost]
-    public IActionResult CreateOrder(CreateOrderDto createOrderDto)
+    public async Task<IActionResult> Create([FromBody] Order order)
     {
-        var (HasError, OrderId) = _orderService.CreateOrder(createOrderDto);
-        return HasError ? StatusCode(500,new {Message = "Ocurrió un error inesperado"}) : StatusCode(201, new {OrderId});
+        var (success, id, error) = await _service.CreateOrderAsync(order);
+        if (!success) return BadRequest(new { error });
+        return Ok(new { orderId = id });
+    }
+
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> GetById(int id)
+    {
+        var order = await _service.GetByIdAsync(id);
+        return order is null ? NotFound() : Ok(order);
     }
 
     [HttpGet("terminadas")]
-    public IActionResult GetOrdenesTerminadas()
+    public async Task<IActionResult> GetFinished()
     {
-        var ordenesTerminadas = _orderService.GetFinishedOrders();
-        return StatusCode(200, new{ordenesTerminadas});
+        var ordenes = await _service.GetFinishedAsync();
+        return Ok(new { ordenesTerminadas = ordenes });
     }
 
-    //api/Order/total
     [HttpGet("total")]
-    public IActionResult GetTotalOrders()
+    public async Task<IActionResult> GetTotal()
     {
-        var totalOrders = _orderService.GetOrderCount();
-        return StatusCode(200, new{totalOrders});
+        var total = await _service.GetTotalAsync();
+        return Ok(new { totalOrders = total });
     }
 
-    [HttpPut]
-    public IActionResult PutOrderFields(ChangeOrderDto changeOrderDto)
+    [HttpPut("{id:int}")]
+    public async Task<IActionResult> Update(int id, [FromBody] Order order)
     {
-        var updated = _orderService.PutOrderFields(changeOrderDto);
-        return updated ? StatusCode(200,new {Message = "Se cambiaron los campos correctamente"}) : StatusCode(500, new {Message = "No existe esa orden"});
+        var (success, error) = await _service.UpdateAsync(order);
+        if (!success) return BadRequest(new { error });
+        return NoContent();
+    }
+
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var (success, error) = await _service.DeleteAsync(id);
+        if (!success) return BadRequest(new { error });
+        return NoContent();
     }
 }

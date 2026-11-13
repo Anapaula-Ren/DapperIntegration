@@ -1,63 +1,46 @@
 using Orders.Api.models;
-using Orders.Api.models.dtos;
+using Orders.Api.repositories;
 
-namespace Orders.Api.services
+namespace Orders.Api.services;
+
+public class OrderService : IOrderService
 {
-    public class OrderService : IOrderService
+    private readonly IOrderRepository _repository;
+
+    public OrderService(IOrderRepository repository)
     {
-        static List<Order> orders = [
-            new() {Id = Guid.NewGuid().ToString(), CustomerCode = "WALMART", Status = "In Transit"},
-            new() {Id = Guid.NewGuid().ToString(), CustomerCode = "JUMEX", Status = "Dispatched", HasFinished=true},
-            new() {Id = Guid.NewGuid().ToString(), CustomerCode = "AMAZON", Status = "In Yard", HasFinished=true}
-        ];
-        public (bool HasError, string? OrderId) CreateOrder(CreateOrderDto createOrderDto)
-        {
-            try
-            {
-                var orderId = Guid.NewGuid().ToString();
-                orders.Add(new Order
-                {
-                    Id = orderId, 
-                    CustomerCode = createOrderDto.CustomerCode,
-                    Status = createOrderDto.Status,
-                    HasFinished = createOrderDto.HasFinished
-                });
-                return(false, orderId);
-            }
-            catch (Exception ex)
-            {
-                Console.Write(ex.Message);
-                return(true,null);
-            }
-        }
+        _repository = repository;
+    }
 
-        public List<Order> GetFinishedOrders()
-        {
-            return [..orders.Where(order=>order.HasFinished==true)];
-        }
+    public async Task<(bool Success, int? OrderId, string? Error)> CreateOrderAsync(Order order)
+    {
+        return await _repository.CreateAsync(order);
+    }
 
-        public int GetOrderCount()
-        {
-            return orders.Count;
-        }
-        
-        public bool PutOrderFields(ChangeOrderDto changeOrderDto)
-        {
-            try
-            {
-                var order = orders.Find(order => order.Id == changeOrderDto.Id);
-                if (order is null)
-                    return false;
+    public async Task<Order?> GetByIdAsync(int id)
+    {
+        return await _repository.GetByIdAsync(id);
+    }
 
-                order.Status = changeOrderDto.Status;
-                order.HasFinished = changeOrderDto.HasFinished;
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return false;
-            }
-        }
+    public async Task<IReadOnlyList<Order>> GetFinishedAsync()
+    {
+        var all = await _repository.GetAllAsync();
+        return all.Where(o => o.HasFinished).ToList();
+    }
+
+    public async Task<int> GetTotalAsync()
+    {
+        var all = await _repository.GetAllAsync();
+        return all.Count;
+    }
+
+    public async Task<(bool Success, string? Error)> UpdateAsync(Order order)
+    {
+        return await _repository.UpdateAsync(order);
+    }
+
+    public async Task<(bool Success, string? Error)> DeleteAsync(int id)
+    {
+        return await _repository.DeleteAsync(id);
     }
 }

@@ -1,13 +1,13 @@
 using Orders.Api.models;
-using Orders.Api.models.dtos;
 
-namespace Orders.Api.services
+namespace Orders.Api.services;
+
+public interface IOrderService
 {
-    public interface IOrderService
-    {
-        (bool HasError,string? OrderId) CreateOrder(CreateOrderDto createOrderDto);
-        List<Order> GetFinishedOrders();
-        int GetOrderCount();
-        bool PutOrderFields(ChangeOrderDto changeOrderDto);
-    }
+    Task<(bool Success, int? OrderId, string? Error)> CreateOrderAsync(Order order);
+    Task<Order?> GetByIdAsync(int id);
+    Task<IReadOnlyList<Order>> GetFinishedAsync();
+    Task<int> GetTotalAsync();
+    Task<(bool Success, string? Error)> UpdateAsync(Order order);
+    Task<(bool Success, string? Error)> DeleteAsync(int id);
 }
